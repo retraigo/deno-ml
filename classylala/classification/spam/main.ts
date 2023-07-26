@@ -35,7 +35,7 @@ const x = data.map((msg) => msg[1]);
 // Get the classes
 const y = data.map((msg) => ymap.indexOf(msg[0]));
 
-const [train, test] = useSplit({ ratio: [7, 3], shuffle: true }, x, y) as [[typeof x, typeof y], [typeof x, typeof y]];
+const [train, test] = useSplit({ ratio: [5, 5], shuffle: true }, x, y) as [[typeof x, typeof y], [typeof x, typeof y]];
 
 // Vectorize the text messages
 const vec = new CountVectorizer({ stopWords: "english", lowercase: true }).fit(
@@ -53,7 +53,7 @@ reg.train(x_tfidf, train[1]);
 const xvec_test = tfidf.transform(vec.transform(test[0]));
 
 // Test for accuracy
-console.log("Trained Complete");
+console.log("Training Complete");
 
 // Check Metrics
 const cMatrix = reg.confusionMatrix(xvec_test, test[1]);

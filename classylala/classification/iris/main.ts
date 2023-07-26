@@ -41,7 +41,7 @@ const [train, test] = useSplit({ ratio: [7, 3], shuffle: true }, x, y) as [
 // Train the model with the training data
 reg.train(train[0], train[1]);
 
-console.log("Trained Complete");
+console.log("Training Complete");
 
 // Check Metrics
 const cMatrix = reg.confusionMatrix(test[0], test[1]);
