@@ -1,7 +1,3 @@
-/**
- * This example shows how to train a neural network to predict the output of the XOR function.
- */
-
 import {
   Cost,
   CPU,
@@ -56,15 +52,7 @@ const net = new Sequential({
   // Disable logging during training
   silent: true,
 
-  /**
-   * Defines the layers of a neural network in the XOR function example.
-   * The neural network has two input neurons and one output neuron.
-   * The layers are defined as follows:
-   * - A dense layer with 3 neurons.
-   * - sigmoid activation layer.
-   * - A dense layer with 1 neuron.
-   * -A sigmoid activation layer.
-   */
+  // Define each layer of the network
   layers: [
     // A dense layer with 3 neurons
     DenseLayer({ size: [4] }),
@@ -76,17 +64,13 @@ const net = new Sequential({
     SigmoidLayer(),
   ],
 
-  /**
-   * The cost function used for training the network is the mean squared error (MSE).
-   */
+  // We are using MSE for finding cost
   cost: Cost.MSE,
 });
 
 const time = performance.now();
 
-/**
- * Train the network on the given data.
- */
+// Train the network
 net.train(
   [
     {
@@ -94,17 +78,13 @@ net.train(
       outputs: tensor2D(train[1].map(x => [x])),
     },
   ],
-  /**
-   * The number of iterations is set to 10000.
-   */
+  // Train for 10000 epochs
   10000,
 );
 
 console.log(`training time: ${performance.now() - time}ms`);
 
-/**
- * Predict the output of the network for the given inputs.
- */
+// Calculate metrics
 let [tp, fn, fp, tn] = [0, 0, 0, 0]
 for (let i = 0; i < test[0].length; i+=1) {
     const res = (await net.predict(tensor1D(test[0][i]))).data[0] < 0.5 ? 0 : 1
