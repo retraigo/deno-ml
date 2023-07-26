@@ -1,0 +1,9 @@
+{
+  "tasks": {
+    "netsaur:iris": "deno run -A --unstable netsaur/classification/iris/main.ts",
+    "lala:iris": "deno run -A --unstable classylala/classification/iris/main.ts",
+    "lala:spam": "deno run -A --unstable classylala/classification/spam/main.ts",
+    "lala:linreg": "deno run -A --unstable classylala/regression/linear_ols/main.ts",
+    "lala:sgdreg": "deno run -A --unstable classylala/regression/linear_sgd/main.ts"
+  }
+}
