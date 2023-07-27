@@ -59,7 +59,7 @@ const x_vec = vec.transform(train[0]);
 const tfidf = new TfIdfTransformer().fit(x_vec);
 
 const x_tfidf = tfidf.transform(x_vec);
-console.log("transforemd");
+
 // Setup the CPU backend for Netsaur
 await setupBackend(CPU);
 
