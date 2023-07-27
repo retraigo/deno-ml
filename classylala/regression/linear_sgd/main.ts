@@ -1,18 +1,18 @@
-/** Import csv parser from the standard library */
+// Import csv parser from the standard library 
 import { parse } from "https://deno.land/std@0.188.0/csv/parse.ts";
-/** Import helper to split dataset */
+// Import helper to split dataset 
 import { useSplit } from "https://deno.land/x/denouse@v0.0.6/mod.ts";
-/** Import SGD Linear Regressor */
+// Import SGD Linear Regressor 
 import { SgdLinearRegressor } from "https://deno.land/x/classylala@v0.2.0/src/native.ts";
 
-/** Read the training dataset */
+// Read the training dataset 
 const _data = Deno.readTextFileSync("datasets/Student_Performance.csv");
 const data = parse(_data);
-/** Get the independent variables (x) and map text to numbers */
+// Get the independent variables (x) and map text to numbers 
 const x = data.map((fl) =>
   [fl[0], fl[1], fl[2] === "Yes" ? 1 : 0, fl[3], fl[4]].map(Number)
 );
-/** Get dependent variables (y) */
+// Get dependent variables (y) 
 const y = data.map((fl) => Number(fl[5]));
 
 
