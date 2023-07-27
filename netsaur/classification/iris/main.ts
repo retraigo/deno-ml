@@ -46,7 +46,7 @@ await setupBackend(CPU);
 // Create a sequential neural network
 const net = new Sequential({
   // Set number of minibatches to 4
-  // Set size of output to 2
+  // Set size of output to 4
   size: [4, 4],
 
   // Disable logging during training
@@ -54,7 +54,7 @@ const net = new Sequential({
 
   // Define each layer of the network
   layers: [
-    // A dense layer with 3 neurons
+    // A dense layer with 4 neurons
     DenseLayer({ size: [4] }),
     // A sigmoid activation layer
     SigmoidLayer(),
@@ -63,7 +63,6 @@ const net = new Sequential({
     // Another sigmoid layer
     SigmoidLayer(),
   ],
-
   // We are using MSE for finding cost
   cost: Cost.MSE,
 });
