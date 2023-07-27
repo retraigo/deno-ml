@@ -103,7 +103,6 @@ const net = new Sequential({
 
 const time = performance.now();
 const inputs = tensor(x_tfidf.data, x_tfidf.shape);
-console.log("gonna train");
 // Train the network
 net.train(
   [
