@@ -122,6 +122,16 @@
     "https://deno.land/x/vectorizer@v0.0.4/src/text/count_vectorizer.ts": "49eb4b6bf0b2af30269d34b60f659a4168611ab1d0bbbc6b59d01bb18c3450a4",
     "https://deno.land/x/vectorizer@v0.0.4/src/text/tf_idf_transformer.ts": "a154626a344c722bb163ec3f0cc975e043b21521ba43acec8813c8b9804f0af1",
     "https://deno.land/x/vectorizer@v0.0.4/src/types.ts": "c636759f433a31b587c1caefe154e2df1b03f32242fefe5e16c8a03514e4ff3d",
-    "https://deno.land/x/vectorizer@v0.0.4/src/util.ts": "108090923f2a86f59e5172a12ce798c1acdd7ff436aae6be208b2a92ac8c41a3"
+    "https://deno.land/x/vectorizer@v0.0.4/src/util.ts": "108090923f2a86f59e5172a12ce798c1acdd7ff436aae6be208b2a92ac8c41a3",
+    "https://deno.land/x/vectorizer@v0.0.6/mod.ts": "f93b9384ce12bd5ea8027e01abb84aa5e1597750e1b15bb72110e61b191bdd25",
+    "https://deno.land/x/vectorizer@v0.0.6/src/image.ts": "70b41e086aad86913ba53a8e2a5fb9002fbf4ee6449d031cd93f23d4400a1863",
+    "https://deno.land/x/vectorizer@v0.0.6/src/image/patch_2d.ts": "f7aa4cda54e10efc4f75fd5d7cd976b2c8b27b89d7700244298a93679bd4b53e",
+    "https://deno.land/x/vectorizer@v0.0.6/src/text.ts": "615f76fa49faccd5fc4ed71fa3aba2b760544ecd4a4548c539884d633a77d8fb",
+    "https://deno.land/x/vectorizer@v0.0.6/src/text/base.ts": "44c778d86a11ab4fb4eba5c68d9fa631f1fd726acf453fd35cbe022ce43c2c17",
+    "https://deno.land/x/vectorizer@v0.0.6/src/text/count_vectorizer.ts": "093b19b2a950bfb4809492da87bb1ad76519deee95f9b06ccb362e6457e3e004",
+    "https://deno.land/x/vectorizer@v0.0.6/src/text/tf_idf_transformer.ts": "07dd37d4983161221627f216d9301556075ac97c424225859474bf84ef87f152",
+    "https://deno.land/x/vectorizer@v0.0.6/src/types.ts": "c636759f433a31b587c1caefe154e2df1b03f32242fefe5e16c8a03514e4ff3d",
+    "https://deno.land/x/vectorizer@v0.0.6/src/util.ts": "108090923f2a86f59e5172a12ce798c1acdd7ff436aae6be208b2a92ac8c41a3",
+    "https://deno.land/x/vectorizer@v0.0.6/src/utils/matrix.ts": "30c8dfceb198b51a3e3499fa415c36dcff4738b9f5be46fec91d9c4ad684beab"
   }
 }
