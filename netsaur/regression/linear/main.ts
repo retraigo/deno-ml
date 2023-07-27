@@ -38,7 +38,7 @@ await setupBackend(CPU);
 // Create a sequential neural network
 const net = new Sequential({
   // Set number of minibatches to 4
-  // Set size of output to 2
+  // Set size of output to 5
   size: [4, 5],
 
   // Disable logging during training
