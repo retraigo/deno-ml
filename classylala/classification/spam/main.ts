@@ -8,19 +8,19 @@ import { parse } from "https://deno.land/std@0.188.0/csv/parse.ts";
 // Import helper to split dataset
 import { useSplit } from "https://deno.land/x/denouse@v0.0.6/mod.ts";
 // Import Logistic Regressor
-import { LogisticRegressor } from "https://deno.land/x/classylala@v0.2.0/src/native.ts";
+import { LogisticRegressor } from "https://deno.land/x/classylala@v0.2.1/src/native.ts";
 // Import CountVectorizer and TfIdf Transformer to convert text into tf-idf features
 import {
   CountVectorizer,
   TfIdfTransformer,
-} from "https://deno.land/x/vectorizer@v0.0.4/mod.ts";
+} from "https://deno.land/x/vectorizer@v0.0.6/mod.ts";
 // Import helpers for metrics
 import {
   accuracyScore,
   precisionScore,
   sensitivityScore,
   specificityScore,
-} from "https://deno.land/x/classylala@v0.2.0/src/helpers.ts";
+} from "https://deno.land/x/classylala@v0.2.1/src/helpers.ts";
 
 // Define classes
 const ymap = ["spam", "ham"];

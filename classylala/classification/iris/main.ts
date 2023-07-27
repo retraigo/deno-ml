@@ -8,14 +8,15 @@
 // Import csv parser from the standard library
 import { parse } from "https://deno.land/std@0.188.0/csv/parse.ts";
 // Import Logistic Regressor
-import { LogisticRegressor } from "https://deno.land/x/classylala@v0.2.0/src/native.ts";
+import { LogisticRegressor } from "https://deno.land/x/classylala@v0.2.1/src/native.ts";
 // Import helper to split dataset
 import {
   accuracyScore,
+  Matrix,
   precisionScore,
   sensitivityScore,
   specificityScore,
-} from "https://deno.land/x/classylala@v0.2.0/src/helpers.ts";
+} from "https://deno.land/x/classylala@v0.2.1/src/helpers.ts";
 // Used to split the dataset
 import { useSplit } from "https://deno.land/x/denouse@v0.0.6/mod.ts";
 
@@ -38,13 +39,29 @@ const [train, test] = useSplit({ ratio: [7, 3], shuffle: true }, x, y) as [
   [typeof x, typeof y],
 ];
 
+const x_train = new Matrix(new Float32Array(train[0].length * 4), [
+  train[0].length,
+  4,
+]);
+train[0].forEach((fl, i) =>
+  x_train.setRow(i, Float32Array.from(fl.slice(0, 4).map(Number)))
+);
+
 // Train the model with the training data
-reg.train(train[0], train[1]);
+reg.train(x_train, train[1]);
 
 console.log("Training Complete");
 
+const x_test = new Matrix(new Float32Array(test[0].length * 4), [
+  test[0].length,
+  4,
+]);
+test[0].forEach((fl, i) =>
+  x_test.setRow(i, Float32Array.from(fl.slice(0, 4).map(Number)))
+);
+
 // Check Metrics
-const cMatrix = reg.confusionMatrix(test[0], test[1]);
+const cMatrix = reg.confusionMatrix(x_test, test[1]);
 
 console.log("Confusion Matrix: ", cMatrix);
 console.log("Accuracy: ", `${accuracyScore(cMatrix) * 100}%`);
