@@ -111,8 +111,8 @@ net.train(
       outputs: tensor2D(train[1].map((x) => [x])),
     },
   ],
-  // Train for 10000 epochs
-  500,
+  // Train for 100 epochs
+  100,
   5,
   0.01,
 );
