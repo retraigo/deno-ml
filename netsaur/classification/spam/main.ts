@@ -27,7 +27,7 @@ import {
 import {
   CountVectorizer,
   TfIdfTransformer,
-} from "https://deno.land/x/vectorizer@v0.0.6/mod.ts";
+} from "https://deno.land/x/vectorizer@v0.0.8/mod.ts";
 import {
   AdamOptimizer,
 } from "https://deno.land/x/netsaur@0.2.8/src/core/api/optimizer.ts";

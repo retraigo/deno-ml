@@ -6,21 +6,21 @@
 // Import csv parser from the standard library
 import { parse } from "https://deno.land/std@0.188.0/csv/parse.ts";
 // Import helper to split dataset
-import { useSplit } from "https://deno.land/x/denouse@v0.0.6/mod.ts";
+import { useSplit } from "https://deno.land/x/denouse@v0.0.12/use/array/split.ts";
 // Import Logistic Regressor
-import { LogisticRegressor } from "https://deno.land/x/classylala@v0.2.1/src/native.ts";
+import { LogisticRegressor } from "https://deno.land/x/classylala@v0.2.2/src/native.ts";
 // Import CountVectorizer and TfIdf Transformer to convert text into tf-idf features
 import {
   CountVectorizer,
   TfIdfTransformer,
-} from "https://deno.land/x/vectorizer@v0.0.6/mod.ts";
+} from "https://deno.land/x/vectorizer@v0.0.12/mod.ts";
 // Import helpers for metrics
 import {
   accuracyScore,
   precisionScore,
   sensitivityScore,
   specificityScore,
-} from "https://deno.land/x/classylala@v0.2.1/src/helpers.ts";
+} from "https://deno.land/x/classylala@v0.2.2/src/helpers.ts";
 
 // Define classes
 const ymap = ["spam", "ham"];
@@ -35,7 +35,10 @@ const x = data.map((msg) => msg[1]);
 // Get the classes
 const y = data.map((msg) => ymap.indexOf(msg[0]));
 
-const [train, test] = useSplit({ ratio: [5, 5], shuffle: true }, x, y) as [[typeof x, typeof y], [typeof x, typeof y]];
+const [train, test] = useSplit({ ratio: [5, 5], shuffle: true }, x, y) as [
+  [typeof x, typeof y],
+  [typeof x, typeof y],
+];
 
 // Vectorize the text messages
 const vec = new CountVectorizer({ stopWords: "english", lowercase: true }).fit(
