@@ -7,18 +7,34 @@
 
 // Import csv parser from the standard library
 import { parse } from "https://deno.land/std@0.188.0/csv/parse.ts";
-// Import Logistic Regressor
-import { LogisticRegressor } from "https://deno.land/x/classylala@v0.2.2/src/native.ts";
 // Import helper to split dataset
 import {
+  Sliceable,
+  useSplit,
+} from "https://deno.land/x/denouse@v0.0.12/use/array/split.ts";
+// Import Logistic Regressor
+import {
+  LossFunction,
+  Model,
+  Optimizer,
+  solve,
+  Solver,
+} from "https://deno.land/x/classylala@v0.4.1/src/mod.ts";
+import {
   accuracyScore,
+  ConfusionMatrix,
   precisionScore,
+  Scheduler,
   sensitivityScore,
+  sigmoid,
   specificityScore,
-} from "https://deno.land/x/classylala@v0.2.1/src/helpers.ts";
-// Used to split the dataset
-import { useSplit, Sliceable } from "https://deno.land/x/denouse@v0.0.12/use/array/split.ts";
-import { Matrix } from "https://deno.land/x/vectorizer@v0.0.12/mod.ts";
+} from "https://deno.land/x/classylala@v0.4.1/src/helpers.ts";
+// Import CountVectorizer and TfIdf Transformer to convert text into tf-idf features
+import {
+  Matrix,
+} from "https://deno.land/x/vectorizer@v0.0.20/mod.ts";
+// Import helpers for metrics
+
 
 // Define classes
 const ymap = ["Setosa", "Versicolor"];
@@ -27,31 +43,61 @@ const ymap = ["Setosa", "Versicolor"];
 const _data = Deno.readTextFileSync("datasets/iris.csv");
 const data = parse(_data);
 
-// Train for 10000 epochs
-const reg = new LogisticRegressor({ epochs: 10000, silent: true });
-
 // Get the predictors (x) and classes (y)
-const x = new Matrix(Float32Array, [data.length, 4]);
+const x = new Matrix(Float64Array, [data.length, 4]);
 data.forEach((fl, i) => x.setRow(i, fl.slice(0, 4).map(Number)));
-const y = data.map((fl) => ymap.indexOf(fl[4]));
+const y = new Matrix(new Float64Array(data.map((fl) => ymap.indexOf(fl[4]))), [data.length]);
 
 const [train, test] = useSplit(
   { ratio: [7, 3], shuffle: true },
   x as Sliceable<typeof x.data>,
-  y,
+  y as Sliceable<typeof x.data>,
 ) as unknown as [
   [typeof x, typeof y],
   [typeof x, typeof y],
 ];
 
-// Train the model with the training data
-reg.train(train[0], train[1]);
+const [weights] = solve(
+  {
+    epochs: 1000,
+    model: Model.Logit,
+    silent: false,
+    loss: LossFunction.BinCrossEntropy,
+    n_batches: 5,
+    optimizer: {
+      type: Optimizer.None,
+    },
+    scheduler: {
+      type: Scheduler.DecayScheduler,
+      config: {
+        rate: 0.99,
+        step_size: 50,
+      },
+    },
+  },
+  Solver.SGD,
+  train[0],
+  train[1],
+);
 
+// Test for accuracy
 console.log("Training Complete");
-
-
 // Check Metrics
-const cMatrix = reg.confusionMatrix(test[0], test[1]);
+let [tp, fn, fp, tn] = [0, 0, 0, 0];
+for (let i = 0; i < test[0].nRows; i += 1) {
+  const guess =
+    sigmoid(weights.dot(new Matrix(new Float64Array(test[0].row(i)), [1]))) >
+        0.5
+      ? 1
+      : 0;
+
+  if (guess === 0 && test[1].item(i, 0) === 0) tn += 1;
+  else if (guess === 0 && test[1].item(i, 0) === 1) fn += 1;
+  else if (guess === 1 && test[1].item(i, 0) === 0) fp += 1;
+  else tp += 1;
+}
+
+const cMatrix = new ConfusionMatrix([tp, fn, fp, tn]);
 
 console.log("Confusion Matrix: ", cMatrix);
 console.log("Accuracy: ", `${accuracyScore(cMatrix) * 100}%`);
