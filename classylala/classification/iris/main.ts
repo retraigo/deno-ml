@@ -12,29 +12,20 @@ import {
   Sliceable,
   useSplit,
 } from "https://deno.land/x/denouse@v0.0.12/use/array/split.ts";
-// Import Logistic Regressor
-import {
-  LossFunction,
-  Model,
-  Optimizer,
-  solve,
-  Solver,
-} from "https://deno.land/x/classylala@v0.4.1/src/mod.ts";
+
 import {
   accuracyScore,
   ConfusionMatrix,
   precisionScore,
-  Scheduler,
   sensitivityScore,
   sigmoid,
   specificityScore,
-} from "https://deno.land/x/classylala@v0.4.1/src/helpers.ts";
-// Import CountVectorizer and TfIdf Transformer to convert text into tf-idf features
-import {
-  Matrix,
-} from "https://deno.land/x/vectorizer@v0.0.20/mod.ts";
-// Import helpers for metrics
+} from "https://deno.land/x/classylala@v0.5.0/src/helpers.ts";
+import { Matrix } from "https://deno.land/x/vectorizer@v0.0.20/mod.ts";
 
+import { MinibatchSGDSolver } from "https://deno.land/x/classylala@v0.5.0/src/api/core/solver/minibatch_sgd.ts";
+import { binCrossEntropy } from "https://deno.land/x/classylala@v0.5.0/src/api/core/loss.ts";
+import { sigmoidActivation } from "https://deno.land/x/classylala@v0.5.0/src/api/core/activation.ts";
 
 // Define classes
 const ymap = ["Setosa", "Versicolor"];
@@ -46,7 +37,9 @@ const data = parse(_data);
 // Get the predictors (x) and classes (y)
 const x = new Matrix(Float64Array, [data.length, 4]);
 data.forEach((fl, i) => x.setRow(i, fl.slice(0, 4).map(Number)));
-const y = new Matrix(new Float64Array(data.map((fl) => ymap.indexOf(fl[4]))), [data.length]);
+const y = new Matrix(new Float64Array(data.map((fl) => ymap.indexOf(fl[4]))), [
+  data.length,
+]);
 
 const [train, test] = useSplit(
   { ratio: [7, 3], shuffle: true },
@@ -57,28 +50,21 @@ const [train, test] = useSplit(
   [typeof x, typeof y],
 ];
 
-const [weights] = solve(
-  {
-    epochs: 1000,
-    model: Model.Logit,
-    silent: false,
-    loss: LossFunction.BinCrossEntropy,
-    n_batches: 5,
-    optimizer: {
-      type: Optimizer.None,
-    },
-    scheduler: {
-      type: Scheduler.DecayScheduler,
-      config: {
-        rate: 0.99,
-        step_size: 50,
-      },
-    },
-  },
-  Solver.SGD,
+const solver = new MinibatchSGDSolver({
+  loss: binCrossEntropy(),
+  activation: sigmoidActivation()
+});
+
+solver.train(
   train[0],
   train[1],
+  {
+    epochs: 1000,
+    silent: false,
+  },
 );
+
+const weights = solver.weights as Matrix<Float64Array>;
 
 // Test for accuracy
 console.log("Training Complete");

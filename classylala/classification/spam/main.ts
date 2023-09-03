@@ -10,29 +10,25 @@ import {
   Sliceable,
   useSplit,
 } from "https://deno.land/x/denouse@v0.0.12/use/array/split.ts";
-// Import Logistic Regressor
-import {
-  LossFunction,
-  Model,
-  Optimizer,
-  solve,
-  Solver,
-} from "https://deno.land/x/classylala@v0.4.1/src/mod.ts";
 import {
   accuracyScore,
   ConfusionMatrix,
   precisionScore,
-  Scheduler,
   sensitivityScore,
   sigmoid,
   specificityScore,
-} from "https://deno.land/x/classylala@v0.4.1/src/helpers.ts";
+} from "https://deno.land/x/classylala@v0.5.0/src/helpers.ts";
+
+import { MinibatchSGDSolver } from "https://deno.land/x/classylala@v0.5.0/src/api/core/solver/minibatch_sgd.ts";
+import { binCrossEntropy } from "https://deno.land/x/classylala@v0.5.0/src/api/core/loss.ts";
+import { sigmoidActivation } from "https://deno.land/x/classylala@v0.5.0/src/api/core/activation.ts";
 // Import CountVectorizer and TfIdf Transformer to convert text into tf-idf features
 import {
   CountVectorizer,
   Matrix,
   TfIdfTransformer,
 } from "https://deno.land/x/vectorizer@v0.0.20/mod.ts";
+import { adamOptimizer } from "https://deno.land/x/classylala@v0.5.0/src/api/core/optimizer.ts";
 // Import helpers for metrics
 
 // Define classes
@@ -66,33 +62,22 @@ const x_vec = vec.transform(train[0]);
 const tfidf = new TfIdfTransformer().fit(x_vec);
 
 const x_tfidf = tfidf.transform(x_vec);
-const [weights] = solve(
-  {
-    epochs: 1000,
-    model: Model.Logit,
-    silent: false,
-    loss: LossFunction.BinCrossEntropy,
-    n_batches: 5,
-    optimizer: {
-      type: Optimizer.Adam,
-      config: {
-        beta1: 0.9,
-        beta2: 0.999,
-        epsilon: 1e-8,
-      },
-    },
-    scheduler: {
-      type: Scheduler.OneCycleScheduler,
-      config: {
-        max_lr: 0.01,
-        cycle_steps: 50,
-      },
-    },
-  },
-  Solver.Minibatch,
+const solver = new MinibatchSGDSolver({
+  optimizer: adamOptimizer(x_tfidf.nCols),
+  loss: binCrossEntropy(),
+  activation: sigmoidActivation()
+});
+
+solver.train(
   x_tfidf,
   train[1],
+  {
+    epochs: 300,
+    silent: false,
+  },
 );
+
+const weights = solver.weights as Matrix<Float64Array>;
 
 const xvec_test = tfidf.transform(vec.transform(test[0]));
 
