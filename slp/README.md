@@ -1,0 +1,1 @@
+This directory contains examples that use single-layer perceptrons.
