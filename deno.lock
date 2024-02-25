@@ -2,6 +2,7 @@
   "version": "3",
   "packages": {
     "specifiers": {
+      "jsr:@denosaurs/netsaur@0.3.1": "jsr:@denosaurs/netsaur@0.3.1",
       "jsr:@denosaurs/plug@1.0.3": "jsr:@denosaurs/plug@1.0.3",
       "jsr:@lala/appraisal@0.4.0": "jsr:@lala/appraisal@0.4.0",
       "jsr:@lala/classy@1.0.1": "jsr:@lala/classy@1.0.1",
@@ -16,6 +17,12 @@
       "jsr:@std/streams@^0.216.0": "jsr:@std/streams@0.216.0"
     },
     "jsr": {
+      "@denosaurs/netsaur@0.3.1": {
+        "integrity": "6689dea52acba910aef70e6d06b2ffa61d57b3b93d56df87bfd49517f2d45567",
+        "dependencies": [
+          "jsr:@denosaurs/plug@1.0.3"
+        ]
+      },
       "@denosaurs/plug@1.0.3": {
         "integrity": "b010544e386bea0ff3a1d05e0c88f704ea28cbd4d753439c2f1ee021a85d4640",
         "dependencies": [
